@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ext\unicorn\list.c" />
+    <ClCompile Include="..\ext\unicorn\msvc\unicorn\qapi-types.c" />
+    <ClCompile Include="..\ext\unicorn\msvc\unicorn\qapi-visit.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\accel.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\glib_compat.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\hw\core\machine.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\hw\core\qdev.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qapi\qapi-dealloc-visitor.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qapi\qapi-visit-core.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qapi\qmp-input-visitor.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qapi\qmp-output-visitor.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qapi\string-input-visitor.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qemu-log.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qemu-timer.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qobject\qbool.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qobject\qdict.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qobject\qerror.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qobject\qfloat.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qobject\qint.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qobject\qlist.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qobject\qstring.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qom\container.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qom\cpu.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qom\object.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\qom\qom-qobject.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\tcg-runtime.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\util\aes.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\util\bitmap.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\util\bitops.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\util\crc32c.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\util\cutils.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\util\error.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\util\getauxval.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\util\host-utils.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\util\module.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\util\oslib-win32.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\util\qemu-error.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\util\qemu-thread-win32.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\util\qemu-timer-common.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\vl.c" />
+    <ClCompile Include="..\ext\unicorn\uc.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ext\unicorn\include\list.h" />
+    <ClInclude Include="..\ext\unicorn\include\qemu.h" />
+    <ClInclude Include="..\ext\unicorn\include\uc_priv.h" />
+    <ClInclude Include="..\ext\unicorn\include\unicorn\arm.h" />
+    <ClInclude Include="..\ext\unicorn\include\unicorn\arm64.h" />
+    <ClInclude Include="..\ext\unicorn\include\unicorn\m68k.h" />
+    <ClInclude Include="..\ext\unicorn\include\unicorn\mips.h" />
+    <ClInclude Include="..\ext\unicorn\include\unicorn\platform.h" />
+    <ClInclude Include="..\ext\unicorn\include\unicorn\sparc.h" />
+    <ClInclude Include="..\ext\unicorn\include\unicorn\unicorn.h" />
+    <ClInclude Include="..\ext\unicorn\include\unicorn\x86.h" />
+    <ClInclude Include="..\ext\unicorn\msvc\unicorn\config-host.h" />
+    <ClInclude Include="..\ext\unicorn\msvc\unicorn\qapi-types.h" />
+    <ClInclude Include="..\ext\unicorn\msvc\unicorn\qapi-visit.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\config.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\elf.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\address-spaces.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\cpu-all.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\cpu-common.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\cpu-defs.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\cputlb.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\cpu_ldst.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\cpu_ldst_template.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\exec-all.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\gen-icount.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\helper-gen.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\helper-head.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\helper-proto.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\helper-tcg.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\hwaddr.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\ioport.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\memory-internal.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\memory.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\poison.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\ram_addr.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\softmmu-semi.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\exec\spinlock.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\fpu\softfloat.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\glib_compat.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\arm\arm.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\boards.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\cpu\icc_bus.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\hw.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\i386\apic.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\i386\apic_internal.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\i386\pc.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\irq.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\m68k\m68k.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\m68k\mcf.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\mips\bios.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\mips\cpudevs.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\mips\mips.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\qdev-core.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\qdev.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\sparc\grlib.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\sparc\sparc.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\sparc\sparc32_dma.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\hw\sparc\sun4m.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\dealloc-visitor.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\error.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\opts-visitor.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\qmp-input-visitor.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\qmp-output-visitor.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\qmp\qbool.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\qmp\qdict.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\qmp\qerror.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\qmp\qfloat.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\qmp\qint.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\qmp\qjson.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\qmp\qlist.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\qmp\qobject.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\qmp\qstring.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\qmp\types.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\string-input-visitor.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\visitor-impl.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qapi\visitor.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu-common.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\aes.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\atomic.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\bitmap.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\bitops.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\bswap.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\compiler.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\crc32c.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\host-utils.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\int128.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\log.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\module.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\notify.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\osdep.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\queue.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\range.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\thread-posix.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\thread-win32.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\thread.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\timer.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qemu\typedefs.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qom\cpu.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qom\object.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\qom\qom-qobject.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\sysemu\accel.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\sysemu\cpus.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\sysemu\memory_mapping.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\sysemu\os-win32.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\include\sysemu\sysemu.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\vl.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{0A4AB8B4-712D-4867-8DA4-B12DE2B9B40B}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>unicornlib</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <SpectreMitigation>false</SpectreMitigation>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;inline=__inline;__func__=__FUNCTION__;__x86_64__;UNICORN_HAS_ARM64;WIN32_LEAN_AND_MEAN</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)ext/unicorn/include;$(SolutionDir)ext/unicorn/qemu;$(SolutionDir)ext/unicorn/qemu/include;$(SolutionDir)ext/unicorn/qemu/tcg;$(SolutionDir)ext/unicorn/msvc/unicorn;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalDependencies>aarch64-softmmu.lib;aarch64eb-softmmu.lib</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
+    </Lib>
+    <Lib>
+      <LinkTimeCodeGeneration />
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

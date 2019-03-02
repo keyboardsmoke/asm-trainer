@@ -1,0 +1,147 @@
+#include "pch.h"
+
+#include "cxxopts.hpp"
+#include "unicorn/unicorn.h"
+#include "keystone/keystone.h"
+
+#include "emu.h"
+#include "aarch64emu.h"
+
+#include "assembler.h"
+#include "aarch64asm.h"
+
+#define UNICORN_CODE \
+	"\x80\x01\x80\xd2" /* mov x0, #0xC */ \
+	"\x21\x00\x00\xd4" /* svc #1 (print address at x0) */ \
+	"\x01\x00\x00\xd4" /* svc #0 (terminate) */ \
+	"Hello, World!\0"
+
+cxxopts::Options options("asm-trainer", "Assembly Trainer");
+
+bool parse_options(int& argc, char**& argv, std::string& engine, std::string& filename)
+{
+	try
+	{
+		options.add_options()
+			("e,engine", "Assembly engine to use (aarch32, aarch64)", cxxopts::value<std::string>())
+			("f,file", "File to assemble and run the emulator against", cxxopts::value<std::string>());
+
+		auto result = options.parse(argc, argv);
+		
+		if (result.count("e") == 0 ||
+			result.count("f") == 0)
+		{
+			return false;
+		}
+
+		engine = result["e"].as<std::string>();
+		filename = result["f"].as<std::string>();
+
+		return true;
+	}
+	catch (std::exception& e)
+	{
+		std::cout << "EXCEPTION [" << e.what() << "]" << std::endl;
+
+		return false;
+	}
+}
+
+bool read_file(std::string& filename, std::string& file_content)
+{
+	std::ifstream file(filename);
+	
+	if (file.good() == false)
+	{
+		return false;
+	}
+
+	file_content = std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+
+	return true;
+}
+
+int main(int argc, char** argv, char** envp)
+{
+	std::string engine, filename;
+	if (!parse_options(argc, argv, engine, filename))
+	{
+		std::cout << "Failed to parse program options." << std::endl << std::endl;
+		std::cout << options.help();
+		return -1;
+	}
+
+	std::string file_content;
+	if (!read_file(filename, file_content))
+	{
+		std::cout << "The file provided [" << filename << "] could not be read." << std::endl;
+		return -1;
+	}
+
+	// Need to assemble the file
+
+	// Need to emulate the result
+	Emulator* emu = nullptr;
+	Assembler* assembler = nullptr;
+
+	if (engine == "aarch64")
+	{
+		emu = new ARM64Emulator;
+		assembler = new ARM64Assembler;
+	}
+	else if (engine == "aarch32")
+	{
+		// not implemented
+	}
+	else
+	{
+		// not implemented
+	}
+
+	int status = -1;
+
+	std::vector<uint8_t> assembled_code;
+
+	if (!assembler->Initialize())
+	{
+		std::cout << "Failed to initialize the assembler engine." << std::endl;
+		goto end;
+	}
+
+	if (!assembler->Assemble(file_content, assembled_code))
+	{
+		std::cout << "Failed to assemble provided file." << std::endl;
+		goto end;
+	}
+
+	std::cout << ">>> Assembled code is " << assembled_code.size() << " bytes." << std::endl;
+
+	if (!emu->Initialize((void *) assembled_code.data(), assembled_code.size()))
+	{
+		std::cout << "Failed to initialize emulation engine." << std::endl;
+		goto end;
+	}
+
+	std::cout << ">>> Entering emulation state" << std::endl;
+	std::cout << "============================" << std::endl;
+
+	if (!emu->Emulate())
+	{
+		std::cout << "Failed to emulate code." << std::endl;
+		goto end;
+	}
+
+	std::cout << "============================" << std::endl;
+
+	emu->PrintContext(std::cout);
+
+	emu->Close();
+
+	status = 0;
+
+end:
+	delete emu;
+	delete assembler;
+
+	return status;
+}

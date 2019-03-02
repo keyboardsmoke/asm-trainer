@@ -1,0 +1,9 @@
+[submodule "ext/keystone"]
+	path = ext/keystone
+	url = https://github.com/keystone-engine/keystone.git
+[submodule "ext/unicorn"]
+	path = ext/unicorn
+	url = https://github.com/unicorn-engine/unicorn.git
+[submodule "ext/cxxopts"]
+	path = ext/cxxopts
+	url = https://github.com/jarro2783/cxxopts.git
