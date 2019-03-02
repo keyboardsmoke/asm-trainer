@@ -243,7 +243,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>
       </SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;inline=__inline;__func__=__FUNCTION__;__x86_64__;UNICORN_HAS_ARM64;WIN32_LEAN_AND_MEAN</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;inline=__inline;__func__=__FUNCTION__;__x86_64__;UNICORN_HAS_ARM64;UNICORN_HAS_ARM;WIN32_LEAN_AND_MEAN</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)ext/unicorn/include;$(SolutionDir)ext/unicorn/qemu;$(SolutionDir)ext/unicorn/qemu/include;$(SolutionDir)ext/unicorn/qemu/tcg;$(SolutionDir)ext/unicorn/msvc/unicorn;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>None</DebugInformationFormat>
@@ -258,7 +258,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>aarch64-softmmu.lib;aarch64eb-softmmu.lib</AdditionalDependencies>
+      <AdditionalDependencies>aarch64-softmmu.lib;aarch64eb-softmmu.lib;arm-softmmu.lib;armeb-softmmu.lib</AdditionalDependencies>
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>

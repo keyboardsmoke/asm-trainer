@@ -6,25 +6,22 @@
 
 #include "emu.h"
 #include "aarch64emu.h"
+#include "aarch32emu.h"
 
 #include "assembler.h"
 #include "aarch64asm.h"
-
-#define UNICORN_CODE \
-	"\x80\x01\x80\xd2" /* mov x0, #0xC */ \
-	"\x21\x00\x00\xd4" /* svc #1 (print address at x0) */ \
-	"\x01\x00\x00\xd4" /* svc #0 (terminate) */ \
-	"Hello, World!\0"
+#include "aarch32asm.h"
 
 cxxopts::Options options("asm-trainer", "Assembly Trainer");
 
-bool parse_options(int& argc, char**& argv, std::string& engine, std::string& filename)
+bool parse_options(int& argc, char**& argv, std::string& engine, std::string& filename, std::string& output_filename)
 {
 	try
 	{
 		options.add_options()
 			("e,engine", "Assembly engine to use (aarch32, aarch64)", cxxopts::value<std::string>())
-			("f,file", "File to assemble and run the emulator against", cxxopts::value<std::string>());
+			("f,file", "File to assemble and run the emulator against", cxxopts::value<std::string>())
+			("o,output", "Optional parameter to output assembled bytes into a file", cxxopts::value<std::string>());
 
 		auto result = options.parse(argc, argv);
 		
@@ -36,6 +33,11 @@ bool parse_options(int& argc, char**& argv, std::string& engine, std::string& fi
 
 		engine = result["e"].as<std::string>();
 		filename = result["f"].as<std::string>();
+
+		if (result.count("o"))
+		{
+			output_filename = result["o"].as<std::string>();
+		}
 
 		return true;
 	}
@@ -61,10 +63,25 @@ bool read_file(std::string& filename, std::string& file_content)
 	return true;
 }
 
+bool write_binary_file(std::string& filename, std::vector<uint8_t>& binary_content)
+{
+	std::ofstream file(filename, std::ios::out | std::ios::binary);
+	
+	if (file.good() == false)
+	{
+		return false;
+	}
+
+	file.write((char *) binary_content.data(), binary_content.size());
+	file.close();
+
+	return true;
+}
+
 int main(int argc, char** argv, char** envp)
 {
-	std::string engine, filename;
-	if (!parse_options(argc, argv, engine, filename))
+	std::string engine, filename, output_filename;
+	if (!parse_options(argc, argv, engine, filename, output_filename))
 	{
 		std::cout << "Failed to parse program options." << std::endl << std::endl;
 		std::cout << options.help();
@@ -81,6 +98,10 @@ int main(int argc, char** argv, char** envp)
 	// Need to assemble the file
 
 	// Need to emulate the result
+	int status = -1;
+
+	std::vector<uint8_t> assembled_code;
+
 	Emulator* emu = nullptr;
 	Assembler* assembler = nullptr;
 
@@ -88,33 +109,46 @@ int main(int argc, char** argv, char** envp)
 	{
 		emu = new ARM64Emulator;
 		assembler = new ARM64Assembler;
+
+		std::cout << ">>> Using aarch64 emulator and assembler engines." << std::endl;
 	}
 	else if (engine == "aarch32")
 	{
-		// not implemented
+		emu = new ARM32Emulator;
+		assembler = new ARM32Assembler;
+
+		std::cout << ">>> Using aarch32 emulator and assembler engines." << std::endl;
 	}
 	else
 	{
-		// not implemented
+		std::cerr << ">>> Engine \"" << engine << "\" is not supported." << std::endl;
+		goto end;
 	}
-
-	int status = -1;
-
-	std::vector<uint8_t> assembled_code;
 
 	if (!assembler->Initialize())
 	{
-		std::cout << "Failed to initialize the assembler engine." << std::endl;
+		std::cout << ">>> Failed to initialize the assembler engine." << std::endl;
 		goto end;
 	}
 
 	if (!assembler->Assemble(file_content, assembled_code))
 	{
-		std::cout << "Failed to assemble provided file." << std::endl;
+		std::cout << ">>> Failed to assemble provided file." << std::endl;
 		goto end;
 	}
 
 	std::cout << ">>> Assembled code is " << assembled_code.size() << " bytes." << std::endl;
+
+	if (!output_filename.empty())
+	{
+		std::cout << ">>> Writing assembled output to " << output_filename << std::endl;
+
+		if (!write_binary_file(output_filename, assembled_code))
+		{
+			std::cerr << ">>> Unable to write output file " << output_filename << std::endl;
+			goto end;
+		}
+	}
 
 	if (!emu->Initialize((void *) assembled_code.data(), assembled_code.size()))
 	{
@@ -127,7 +161,7 @@ int main(int argc, char** argv, char** envp)
 
 	if (!emu->Emulate())
 	{
-		std::cout << "Failed to emulate code." << std::endl;
+		std::cout << ">>> Failed to emulate code." << std::endl;
 		goto end;
 	}
 
@@ -140,8 +174,11 @@ int main(int argc, char** argv, char** envp)
 	status = 0;
 
 end:
-	delete emu;
-	delete assembler;
+	if (emu != nullptr)
+		delete emu;
+
+	if (assembler != nullptr)
+		delete assembler;
 
 	return status;
 }

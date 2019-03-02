@@ -14,17 +14,33 @@ struct SvcCall
 };
 static_assert(sizeof(SvcCall) == sizeof(uint32_t), "Invalid size for SvcCall");
 
-static void ARM64_SyscallHandler(uc_engine* uc, uint64_t syscall, uint64_t& x0, uint64_t& x1, uint64_t& x2, uint64_t& x3, uint64_t& x4)
+enum Syscalls : int
+{
+	SYSCALL_EXIT,
+	SYSCALL_PRINT,
+	SYSCALL_MAP,
+	SYSCALL_UNMAP,
+	SYSCALL_MEM_MAPPED,
+};
+
+static void ARM64_SyscallHandler(
+	uc_engine* uc, 
+	uint64_t syscall, 
+	uint64_t& ret, 
+	uint64_t& arg1, 
+	uint64_t& arg2, 
+	uint64_t& arg3, 
+	uint64_t& arg4)
 {
 	uc_err err = UC_ERR_OK;
 
-	if (syscall == 0)
+	if (syscall == SYSCALL_EXIT)
 	{
 		uc_emu_stop(uc);
 	}
-	else if (syscall == 1)
+	else if (syscall == SYSCALL_PRINT)
 	{
-		uint64_t addr = x0;
+		uint64_t addr = arg1;
 
 		for (char c = -1; c != 0; ++addr)
 		{
@@ -34,17 +50,23 @@ static void ARM64_SyscallHandler(uc_engine* uc, uint64_t syscall, uint64_t& x0, 
 
 		putc('\n', stdout);
 	}
-	else if (syscall == 2)
+	else if (syscall == SYSCALL_MAP)
 	{
-		err = uc_mem_map(uc, x0, x1, UC_PROT_ALL);
+		err = uc_mem_map(uc, arg1, arg2, UC_PROT_ALL);
 
-		x0 = (err == UC_ERR_OK) ? 1 : 0;
+		ret = (err == UC_ERR_OK) ? 1 : 0;
 	}
-	else if (syscall == 3)
+	else if (syscall == SYSCALL_UNMAP)
 	{
-		err = uc_mem_unmap(uc, x0, x1);
+		err = uc_mem_unmap(uc, arg1, arg2);
 
-		x0 = (err == UC_ERR_OK) ? 1 : 0;
+		ret = (err == UC_ERR_OK) ? 1 : 0;
+	}
+	else if (syscall == SYSCALL_MEM_MAPPED)
+	{
+		uint8_t i = 0;
+		uc_err err = uc_mem_read(uc, arg1, &i, sizeof(uint8_t));
+		ret = (err == UC_ERR_READ_UNMAPPED) ? 0 : 1;
 	}
 }
 
@@ -81,6 +103,7 @@ static void ARM64_InterruptHook(uc_engine* uc, uint32_t number, void* user_data)
 	// Just grab a bunch of registers here so we don't have to make a bunch of calls
 	// Being lazy =)
 	uint64_t x0 = 0, x1 = 0, x2 = 0, x3 = 0, x4 = 0;
+
 	uc_reg_read(uc, UC_ARM64_REG_X0, &x0);
 	uc_reg_read(uc, UC_ARM64_REG_X1, &x1);
 	uc_reg_read(uc, UC_ARM64_REG_X2, &x2);
@@ -154,9 +177,22 @@ bool ARM64Emulator::Emulate()
 	return true;
 }
 
+template<size_t N>
+uc_err ReadRegisterBatch(uc_engine* uc, const int (&registerIds)[N], uint64_t (&values)[N])
+{
+	void* ptrs[N] = { nullptr };
+
+	for (size_t i = 0; i < N; ++i)
+	{
+		ptrs[i] = &values[i];
+	}
+
+	return uc_reg_read_batch(uc, const_cast<int *>(registerIds), ptrs, N);
+}
+
 void ARM64Emulator::PrintContext(std::ostream& os)
 {
-	int regIds[] =
+	const int regIds[9] =
 	{
 		UC_ARM64_REG_X0,
 		UC_ARM64_REG_X1,
@@ -169,7 +205,7 @@ void ARM64Emulator::PrintContext(std::ostream& os)
 		UC_ARM64_REG_LR
 	};
 
-	const char* regNames[] = 
+	const char* regNames[9] = 
 	{
 		"X0",
 		"X1",
@@ -182,15 +218,23 @@ void ARM64Emulator::PrintContext(std::ostream& os)
 		"LR"
 	};
 
-	size_t count = _countof(regIds);
-
 	os << "Context: {" << std::endl;
 
-	for (size_t i = 0; i < count; i++)
+	constexpr size_t count = sizeof(regIds) / sizeof(int);
+
+	uint64_t values[count] = { 0 };
+
+	uc_err err = ReadRegisterBatch(m_uc, regIds, values);
+	if (err)
 	{
-		uint64_t value = 0;
-		uc_reg_read(m_uc, regIds[i], &value);
-		os << "\t" << regNames[i] << " = " << value << "" << std::endl;
+		os << "\t<ERROR>" << std::endl;
+	}
+	else
+	{
+		for (size_t i = 0; i < count; i++)
+		{
+			os << "\t" << regNames[i] << " = " << values[i] << std::endl;
+		}
 	}
 
 	os << "}" << std::endl;
