@@ -20,6 +20,25 @@ enum Syscalls : int
 	SYSCALL_MEM_MAPPED,
 };
 
+static bool ReadStringFromMemory(uc_engine* uc, uint32_t addr, std::string& output)
+{
+	for (char c = -1; c != 0; ++addr)
+	{
+		uc_err err = uc_mem_read(uc, addr, &c, sizeof(char));
+
+		if (err != UC_ERR_OK)
+		{
+			return false;
+		}
+
+		output.push_back(c);
+	}
+
+	output.push_back(0);
+
+	return true;
+}
+
 static void ARM32_SyscallHandler(
 	uc_engine* uc,
 	uint32_t syscall,
@@ -37,15 +56,11 @@ static void ARM32_SyscallHandler(
 	}
 	else if (syscall == SYSCALL_PRINT)
 	{
-		uint64_t addr = arg1;
+		std::string read_string = std::string();
 
-		for (char c = -1; c != 0; ++addr)
-		{
-			uc_mem_read(uc, addr, &c, sizeof(char));
-			putc(c, stdout);
-		}
+		ret = ReadStringFromMemory(uc, arg1, read_string) ? 1 : 0;
 
-		putc('\n', stdout);
+		std::cout << read_string << std::endl;
 	}
 	else if (syscall == SYSCALL_MAP)
 	{
