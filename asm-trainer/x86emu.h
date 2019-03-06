@@ -3,7 +3,7 @@
 class X86Emulator : public Emulator
 {
 public:
-    X86Emulator(uint64_t stackSize = Emulator::PageSize) : Emulator(), m_bufferSize(0), m_stackSize(stackSize) {}
+    X86Emulator(uint64_t stackSize) : Emulator(), m_bufferSize(0), m_stackSize(stackSize) {}
 
     virtual bool Initialize(void* buffer, size_t size) override;
     virtual bool Emulate() override;

@@ -4,6 +4,8 @@
 #include "unicorn/unicorn.h"
 #include "keystone/keystone.h"
 
+#include "allocator.h"
+
 #include "emu.h"
 #include "aarch64emu.h"
 #include "aarch32emu.h"
@@ -18,14 +20,15 @@
 
 cxxopts::Options options("asm-trainer", "Assembly Trainer");
 
-bool parse_options(int& argc, char**& argv, std::string& engine, std::string& filename, std::string& output_filename)
+bool parse_options(int& argc, char**& argv, std::string& engine, std::string& filename, std::string& output_filename, int& stack_size)
 {
 	try
 	{
 		options.add_options()
 			("e,engine", "Assembly engine to use (aarch32, aarch64)", cxxopts::value<std::string>())
 			("f,file", "File to assemble and run the emulator against", cxxopts::value<std::string>())
-			("o,output", "Optional parameter to output assembled bytes into a file", cxxopts::value<std::string>());
+			("o,output", "Optional parameter to output assembled bytes into a file", cxxopts::value<std::string>())
+			("s,stack-size", "Optional parameter to specify the amount of bytes in stack space you require", cxxopts::value<int>());
 
 		auto result = options.parse(argc, argv);
 		
@@ -41,6 +44,15 @@ bool parse_options(int& argc, char**& argv, std::string& engine, std::string& fi
 		if (result.count("o"))
 		{
 			output_filename = result["o"].as<std::string>();
+		}
+
+		if (result.count("s"))
+		{
+			stack_size = result["s"].as<int>();
+		}
+		else
+		{
+			stack_size = 4096;
 		}
 
 		return true;
@@ -84,8 +96,9 @@ bool write_binary_file(std::string& filename, std::vector<uint8_t>& binary_conte
 
 int main(int argc, char** argv, char** envp)
 {
+	int stackSize = 0;
 	std::string engine, filename, output_filename;
-	if (!parse_options(argc, argv, engine, filename, output_filename))
+	if (!parse_options(argc, argv, engine, filename, output_filename, stackSize))
 	{
 		std::cout << "Failed to parse program options." << std::endl << std::endl;
 		std::cout << options.help();
@@ -111,26 +124,26 @@ int main(int argc, char** argv, char** envp)
 
 	if (engine == "aarch64")
 	{
-		emu = new ARM64Emulator;
+		emu = new ARM64Emulator(stackSize);
 		assembler = new ARM64Assembler;
 
 		std::cout << ">>> Using aarch64 emulator and assembler engines." << std::endl;
 	}
 	else if (engine == "aarch32")
 	{
-		emu = new ARM32Emulator;
+		emu = new ARM32Emulator(stackSize);
 		assembler = new ARM32Assembler;
 
 		std::cout << ">>> Using aarch32 emulator and assembler engines." << std::endl;
 	}
     else if (engine == "x64") 
     {
-        emu = new X64Emulator;
+		emu = new X64Emulator(stackSize);
         assembler = new X64Assembler;
     }
     else if (engine == "x86")
     {
-        emu = new X86Emulator;
+		emu = new X86Emulator(stackSize);
         assembler = new X86Assembler;
     }
 	else

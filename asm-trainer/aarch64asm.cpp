@@ -2,7 +2,6 @@
 #include "keystone/keystone.h"
 #include "assembler.h"
 #include "aarch64asm.h"
-#include "emu.h"
 
 bool ARM64Assembler::Initialize()
 {
@@ -23,7 +22,7 @@ bool ARM64Assembler::Assemble(std::string& assembly, std::vector<uint8_t>& encod
 
 	unsigned char* enc = nullptr;
 
-	int result = ks_asm(m_ks, assembly.c_str(), Emulator::StartAddress, &enc, &size, &count);
+	int result = ks_asm(m_ks, assembly.c_str(), 0, &enc, &size, &count);
 
 	if (result != 0)
 	{

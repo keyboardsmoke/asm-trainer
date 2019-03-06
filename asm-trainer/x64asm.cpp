@@ -2,7 +2,6 @@
 #include "keystone/keystone.h"
 #include "assembler.h"
 #include "x64asm.h"
-#include "emu.h"
 
 bool X64Assembler::Initialize()
 {
@@ -31,7 +30,7 @@ bool X64Assembler::Assemble(std::string& assembly, std::vector<uint8_t>& encoded
 
     unsigned char* enc = nullptr;
 
-    int result = ks_asm(m_ks, assembly.c_str(), Emulator::StartAddress, &enc, &size, &count);
+    int result = ks_asm(m_ks, assembly.c_str(), 0, &enc, &size, &count);
 
     if (result != 0)
     {

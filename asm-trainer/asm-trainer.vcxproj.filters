@@ -56,6 +56,15 @@
     <ClInclude Include="x64emu.h">
       <Filter>Header Files\emu</Filter>
     </ClInclude>
+    <ClInclude Include="syscall.h">
+      <Filter>Header Files\emu</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>Header Files\emu</Filter>
+    </ClInclude>
+    <ClInclude Include="allocator.h">
+      <Filter>Header Files\emu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -86,6 +95,12 @@
       <Filter>Source Files\emu</Filter>
     </ClCompile>
     <ClCompile Include="x64emu.cpp">
+      <Filter>Source Files\emu</Filter>
+    </ClCompile>
+    <ClCompile Include="syscall.cpp">
+      <Filter>Source Files\emu</Filter>
+    </ClCompile>
+    <ClCompile Include="allocator.cpp">
       <Filter>Source Files\emu</Filter>
     </ClCompile>
   </ItemGroup>

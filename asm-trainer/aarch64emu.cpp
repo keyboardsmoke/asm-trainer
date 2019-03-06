@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "unicorn/unicorn.h"
+#include "allocator.h"
 #include "emu.h"
 #include "aarch64emu.h"
+#include "syscall.h"
 
 struct SvcCall
 {
@@ -13,62 +15,6 @@ struct SvcCall
 	uint32_t b5 : 8;				// 0 0 1 0 1 0 1 1
 };
 static_assert(sizeof(SvcCall) == sizeof(uint32_t), "Invalid size for SvcCall");
-
-enum Syscalls : int
-{
-	SYSCALL_EXIT,
-	SYSCALL_PRINT,
-	SYSCALL_MAP,
-	SYSCALL_UNMAP,
-	SYSCALL_MEM_MAPPED,
-};
-
-static void ARM64_SyscallHandler(
-	uc_engine* uc, 
-	uint64_t syscall, 
-	uint64_t& ret, 
-	uint64_t& arg1, 
-	uint64_t& arg2, 
-	uint64_t& arg3, 
-	uint64_t& arg4)
-{
-	uc_err err = UC_ERR_OK;
-
-	if (syscall == SYSCALL_EXIT)
-	{
-		uc_emu_stop(uc);
-	}
-	else if (syscall == SYSCALL_PRINT)
-	{
-		uint64_t addr = arg1;
-
-		for (char c = -1; c != 0; ++addr)
-		{
-			uc_mem_read(uc, addr, &c, sizeof(char));
-			putc(c, stdout);
-		}
-
-		putc('\n', stdout);
-	}
-	else if (syscall == SYSCALL_MAP)
-	{
-		err = uc_mem_map(uc, arg1, arg2, UC_PROT_ALL);
-
-		ret = (err == UC_ERR_OK) ? 1 : 0;
-	}
-	else if (syscall == SYSCALL_UNMAP)
-	{
-		err = uc_mem_unmap(uc, arg1, arg2);
-
-		ret = (err == UC_ERR_OK) ? 1 : 0;
-	}
-	else if (syscall == SYSCALL_MEM_MAPPED)
-	{
-		uint8_t i = 0;
-		uc_err err = uc_mem_read(uc, arg1, &i, sizeof(uint8_t));
-		ret = (err == UC_ERR_READ_UNMAPPED) ? 0 : 1;
-	}
-}
 
 static void ARM64_InterruptHook(uc_engine* uc, uint32_t number, void* user_data)
 {
@@ -100,6 +46,8 @@ static void ARM64_InterruptHook(uc_engine* uc, uint32_t number, void* user_data)
 		return;
 	}
 
+	uint64_t syscallNumber = call_value.svcNumber;
+
 	// Just grab a bunch of registers here so we don't have to make a bunch of calls
 	// Being lazy =)
 	uint64_t x0 = 0, x1 = 0, x2 = 0, x3 = 0, x4 = 0;
@@ -110,7 +58,7 @@ static void ARM64_InterruptHook(uc_engine* uc, uint32_t number, void* user_data)
 	uc_reg_read(uc, UC_ARM64_REG_X3, &x3);
 	uc_reg_read(uc, UC_ARM64_REG_X4, &x4);
 
-	ARM64_SyscallHandler(uc, call_value.svcNumber, x0, x1, x2, x3, x4);
+	SyscallHandler(uc, syscallNumber, x0, x1, x2, x3, x4);
 
 	uc_reg_write(uc, UC_ARM64_REG_X0, &x0);
 	uc_reg_write(uc, UC_ARM64_REG_X1, &x1);
@@ -130,41 +78,24 @@ bool ARM64Emulator::Initialize(void* buffer, size_t size)
 		return false;
 	}
 
-	// Initialize the mapping
-    const uint64_t codeMapSize = Emulator::PageAlignUp(size);
+	m_alloc = new Allocator(m_uc, 4096U);
 
-	err = uc_mem_map(m_uc, Emulator::StartAddress, Emulator::PageAlignUp(size), UC_PROT_ALL);
-	
-	if (err)
+	if (!m_alloc->Map(buffer, size, nullptr))
 	{
-		std::cerr << "[ERROR] Emulator uc_mem_map failed with error [" << uc_strerror(err) << "]" << std::endl;
+		std::cerr << "[ERROR] Allocator failed to map code." << std::endl;
 
 		return false;
 	}
 
-	err = uc_mem_write(m_uc, Emulator::StartAddress, buffer, size);
-
-	if (err)
+	uint64_t stackAddress = 0;
+	if (!m_alloc->Allocate(m_stackSize, &stackAddress))
 	{
-		std::cerr << "[ERROR] Emulator uc_mem_write failed with error [" << uc_strerror(err) << "]" << std::endl;
+		std::cerr << "[ERROR] Allocator failed to allocate stack space." << std::endl;
 
 		return false;
 	}
 
-    // Setup fixed length stack
-    const uint64_t stackAddress = Emulator::StartAddress + codeMapSize;
-    const uint64_t stackSize = Emulator::PageAlignUp(m_stackSize);
-
-    err = uc_mem_map(m_uc, stackAddress, stackSize, UC_PROT_ALL);
-
-    if (err)
-    {
-        std::cerr << "[ERROR] Emulator uc_mem_map failed with error [" << uc_strerror(err) << "]" << std::endl;
-
-        return false;
-    }
-
-    std::cout << ">>> Reserved " << std::hex << stackSize << std::dec << " bytes of stack space at address " << std::hex << stackAddress << std::dec << std::endl;
+    std::cout << ">>> Reserved " << std::hex << m_stackSize << std::dec << " bytes of stack space at address " << std::hex << stackAddress << std::dec << std::endl;
 
     err = uc_reg_write(m_uc, UC_ARM64_REG_SP, &stackAddress);
 
@@ -192,7 +123,7 @@ bool ARM64Emulator::Initialize(void* buffer, size_t size)
 
 bool ARM64Emulator::Emulate()
 {
-	uc_err err = uc_emu_start(m_uc, Emulator::StartAddress, Emulator::StartAddress + m_bufferSize, 0, 0);
+	uc_err err = uc_emu_start(m_uc, 0, m_bufferSize, 0, 0);
 
 	if (err)
 	{
