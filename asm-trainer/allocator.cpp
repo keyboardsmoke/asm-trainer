@@ -13,8 +13,6 @@ bool Allocator::Allocate(uint64_t size, uint64_t* address, uint32_t permissions)
 
 	const uint64_t nearestAddress = FindNearestAvailableMemory(size);
 	
-	std::cout << "Nearest (" << nearestAddress << ")" << std::endl;
-
 	if (address)
 	{
 		*address = nearestAddress;
@@ -68,7 +66,7 @@ bool Allocator::Map(void* buffer, uint64_t address, uint64_t size, uint32_t perm
 {
 	size = PageAlignUp(m_pageSize, size);
 
-	uc_err err = uc_mem_map_ptr(m_uc, address, size, permissions, buffer);
+	const uc_err err = uc_mem_map_ptr(m_uc, address, size, permissions, buffer);
 
 	if (err == UC_ERR_OK)
 	{
@@ -85,7 +83,7 @@ bool Allocator::Map(void* buffer, uint64_t address, uint64_t size, uint32_t perm
 
 bool Allocator::Free(uint64_t address)
 {
-	auto entry = m_mappings.find(address);
+	const auto entry = m_mappings.find(address);
 	if (entry == m_mappings.end())
 	{
 		return false;
@@ -93,28 +91,35 @@ bool Allocator::Free(uint64_t address)
 
 	Mapping& mapping = (*entry).second;
 
-	uc_err err = uc_mem_unmap(m_uc, mapping.address, mapping.size);
+	const uc_err err = uc_mem_unmap(m_uc, mapping.address, mapping.size);
 
-	return (err == UC_ERR_OK);
+	if (err == UC_ERR_OK)
+    {
+        m_mappings.erase(entry);
+
+        return true;
+	}
+
+    return false;
 }
 
 bool Allocator::IsMemoryUnmapped(uint64_t address)
 {
 	uint8_t i = 0;
-	uc_err err = uc_mem_read(m_uc, address, &i, sizeof(uint8_t));
+	const uc_err err = uc_mem_read(m_uc, address, &i, sizeof(uint8_t));
 	return (err == UC_ERR_READ_UNMAPPED);
 }
 
 bool Allocator::IsMemoryRegionFree(uint64_t address, uint64_t size)
 {
-	auto close_low = m_mappings.lower_bound(address);
-	if (close_low == m_mappings.end())
+	const auto closeLow = m_mappings.lower_bound(address);
+	if (closeLow == m_mappings.end())
 	{
 		// Nothing mapped yet
 		return true;
 	}
 
-	Mapping& low_map = (*close_low).second;
+	Mapping& low_map = (*closeLow).second;
 
 	// You only have to check the lower bound of the range in this instance
 	if (low_map.IsWithinRange(address))
@@ -122,12 +127,12 @@ bool Allocator::IsMemoryRegionFree(uint64_t address, uint64_t size)
 		return false;
 	}
 
-	auto close_high = close_low;
+	auto closeHigh = closeLow;
 
 	// We need to check to see we don't bleed into the next entry
-	if (++close_high != m_mappings.end())
+	if (++closeHigh != m_mappings.end())
 	{
-		Mapping& high_map = (*close_high).second;
+		Mapping& high_map = (*closeHigh).second;
 
 
 		// You have to make sure address + size doesn't touch this either
@@ -173,5 +178,5 @@ uint64_t Allocator::FindNearestAvailableMemory(uint64_t size)
 		}
 	}
 
-	__assume(0);
+	__assume(false);
 }

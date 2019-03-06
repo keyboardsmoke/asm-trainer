@@ -18,9 +18,12 @@
 #include "x64asm.h"
 #include "x86asm.h"
 
+#include "exercise.h"
+#include "math_exercises.h"
+
 cxxopts::Options options("asm-trainer", "Assembly Trainer");
 
-bool parse_options(int& argc, char**& argv, std::string& engine, std::string& filename, std::string& output_filename, int& stack_size)
+bool parse_options(int& argc, char**& argv, std::string& engine, std::string& filename, std::string& output_filename, std::string& exercise, int& stack_size)
 {
 	try
 	{
@@ -28,6 +31,7 @@ bool parse_options(int& argc, char**& argv, std::string& engine, std::string& fi
 			("e,engine", "Assembly engine to use (aarch32, aarch64)", cxxopts::value<std::string>())
 			("f,file", "File to assemble and run the emulator against", cxxopts::value<std::string>())
 			("o,output", "Optional parameter to output assembled bytes into a file", cxxopts::value<std::string>())
+            ("x,exercise", "Optional parameter to run an exercise on the provided script", cxxopts::value<std::string>())
 			("s,stack-size", "Optional parameter to specify the amount of bytes in stack space you require", cxxopts::value<int>());
 
 		auto result = options.parse(argc, argv);
@@ -45,6 +49,11 @@ bool parse_options(int& argc, char**& argv, std::string& engine, std::string& fi
 		{
 			output_filename = result["o"].as<std::string>();
 		}
+
+        if (result.count("x")) 
+        {
+            exercise = result["x"].as<std::string>();
+        }
 
 		if (result.count("s"))
 		{
@@ -69,7 +78,7 @@ bool read_file(std::string& filename, std::string& file_content)
 {
 	std::ifstream file(filename);
 	
-	if (file.good() == false)
+	if (!file.good())
 	{
 		return false;
 	}
@@ -83,12 +92,12 @@ bool write_binary_file(std::string& filename, std::vector<uint8_t>& binary_conte
 {
 	std::ofstream file(filename, std::ios::out | std::ios::binary);
 	
-	if (file.good() == false)
+	if (!file.good())
 	{
 		return false;
 	}
 
-	file.write((char *) binary_content.data(), binary_content.size());
+	file.write(reinterpret_cast<char *>(binary_content.data()), binary_content.size());
 	file.close();
 
 	return true;
@@ -97,8 +106,8 @@ bool write_binary_file(std::string& filename, std::vector<uint8_t>& binary_conte
 int main(int argc, char** argv, char** envp)
 {
 	int stackSize = 0;
-	std::string engine, filename, output_filename;
-	if (!parse_options(argc, argv, engine, filename, output_filename, stackSize))
+    std::string engine, filename, output_filename, exercise_string;
+	if (!parse_options(argc, argv, engine, filename, output_filename, exercise_string, stackSize))
 	{
 		std::cout << "Failed to parse program options." << std::endl << std::endl;
 		std::cout << options.help();
@@ -121,6 +130,7 @@ int main(int argc, char** argv, char** envp)
 
 	Emulator* emu = nullptr;
 	Assembler* assembler = nullptr;
+    Exercise* exercise = nullptr;
 
 	if (engine == "aarch64")
 	{
@@ -183,8 +193,34 @@ int main(int argc, char** argv, char** envp)
 		goto end;
 	}
 
-	std::cout << ">>> Entering emulation state" << std::endl;
-	std::cout << "============================" << std::endl;
+    // If exercise string is provided, select exercise
+
+    if (!exercise_string.empty())
+    {
+        if (exercise_string == "simplexor") 
+        {
+            exercise = new SimpleXorExercise(emu);
+        }
+
+        // Exercise not found
+        if (exercise == nullptr) 
+        {
+            std::cerr << ">>> Exercise named \"" << exercise_string << "\" is not valid." << std::endl;
+            goto end;
+        }
+        else 
+        {
+            // Failed to initialize state
+            if (!exercise->InitializeEngineState()) 
+            {
+                std::cerr << ">>> Exercise \"" << exercise_string << "\" failed to initialize." << std::endl;
+                goto end;
+            }
+        }
+    }
+
+    std::cout << ">>> Entering emulation state" << std::endl << std::endl;
+	// std::cout << "============================" << std::endl;
 
 	if (!emu->Emulate())
 	{
@@ -192,15 +228,33 @@ int main(int argc, char** argv, char** envp)
 		goto end;
 	}
 
-	std::cout << "============================" << std::endl;
+	// std::cout << "============================" << std::endl;
+
+    std::cout << std::endl;
+
+    if (exercise != nullptr) 
+    {
+        if (!exercise->Evaluate()) 
+        {
+            std::cerr << ">>> Failed exercise, evaluation returned false." << std::endl;
+        }
+        else 
+        {
+            std::cout << ">>> Exercise passed! Good job!" << std::endl;
+        }
+    }
 
 	emu->PrintContext(std::cout);
-
-	emu->Close();
 
 	status = 0;
 
 end:
+    if (emu != nullptr) 
+    {
+        emu->Close();
+    }
+
+    delete exercise;
 	delete emu;
 	delete assembler;
 

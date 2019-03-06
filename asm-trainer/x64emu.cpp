@@ -5,26 +5,11 @@
 #include "x64emu.h"
 #include "syscall.h"
 
-static void X64_InterruptHook(uc_engine* uc, void* user_data)
+static void X64_SyscallHook(uc_engine* uc, void* user_data)
 {
-    uc_err err = UC_ERR_OK;
-
     uint64_t syscallIndex = 0;
 
-    if (user_data == (void *)UC_X86_INS_SYSCALL)
-    {
-        err = uc_reg_read(uc, UC_X86_REG_RAX, &syscallIndex);
-    }
-    else if (user_data == (void *)UC_X86_INS_SYSENTER)
-    {
-        err = uc_reg_read(uc, UC_X86_REG_RAX, &syscallIndex);
-    }
-    else 
-    {
-        // Unhandled, weird.
-        return;
-    }
-
+    uc_err err = uc_reg_read(uc, UC_X86_REG_RAX, &syscallIndex);
 
     // Just grab a bunch of registers here so we don't have to make a bunch of calls
     // Being lazy =)
@@ -36,7 +21,7 @@ static void X64_InterruptHook(uc_engine* uc, void* user_data)
     uc_reg_read(uc, UC_X86_REG_R8, &r8);
     uc_reg_read(uc, UC_X86_REG_R9, &r9);
 
-    SyscallHandler(uc, syscallIndex, rax, rcx, rdx, r8, r9);
+    SyscallHandler(uc, user_data, syscallIndex, rax, rcx, rdx, r8, r9);
 
     uc_reg_write(uc, UC_X86_REG_RAX, &rax);
     uc_reg_write(uc, UC_X86_REG_RCX, &rcx);
@@ -84,18 +69,9 @@ bool X64Emulator::Initialize(void* buffer, size_t size)
         return false;
     }
 
-    uc_hook sysenter, syscall;
-    err = uc_hook_add(m_uc, &syscall, UC_HOOK_INSN, X64_InterruptHook, (void *)(int)UC_X86_INS_SYSCALL, 1, 0, UC_X86_INS_SYSCALL);
+    uc_hook syscall;
+    err = uc_hook_add(m_uc, &syscall, UC_HOOK_INSN, X64_SyscallHook, this, 1, 0, UC_X86_INS_SYSCALL);
     
-    if (err)
-    {
-        std::cerr << "[ERROR] Emulator uc_hook_add failed with error [" << uc_strerror(err) << "]" << std::endl;
-
-        return false;
-    }
-
-    err = uc_hook_add(m_uc, &sysenter, UC_HOOK_INSN, X64_InterruptHook, (void *)(int)UC_X86_INS_SYSENTER, 1, 0, UC_X86_INS_SYSENTER);
-
     if (err)
     {
         std::cerr << "[ERROR] Emulator uc_hook_add failed with error [" << uc_strerror(err) << "]" << std::endl;
@@ -187,7 +163,8 @@ void X64Emulator::PrintContext(std::ostream& os)
 
 void X64Emulator::Close()
 {
-    uc_close(m_uc);
+    if (m_uc != nullptr)
+        uc_close(m_uc);
 
     m_uc = nullptr;
 }

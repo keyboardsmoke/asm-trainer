@@ -48,7 +48,7 @@ static void ARM32_InterruptHook(uc_engine* uc, uint32_t number, void* user_data)
 	uc_reg_read(uc, UC_ARM_REG_R3, &r3);
 	uc_reg_read(uc, UC_ARM_REG_R4, &r4);
 
-	SyscallHandler(uc, call_value.svcNumber, r0, r1, r2, r3, r4);
+	SyscallHandler(uc, user_data, call_value.svcNumber, r0, r1, r2, r3, r4);
 
 	uc_reg_write(uc, UC_ARM_REG_R0, &r0);
 	uc_reg_write(uc, UC_ARM_REG_R1, &r1);
@@ -98,9 +98,8 @@ bool ARM32Emulator::Initialize(void* buffer, size_t size)
         return false;
     }
 
-
 	uc_hook trace;
-	err = uc_hook_add(m_uc, &trace, UC_HOOK_INTR, ARM32_InterruptHook, nullptr, 0, -1);
+	err = uc_hook_add(m_uc, &trace, UC_HOOK_INTR, ARM32_InterruptHook, this, 0, -1);
 
 	if (err)
 	{
@@ -194,7 +193,8 @@ void ARM32Emulator::PrintContext(std::ostream& os)
 
 void ARM32Emulator::Close()
 {
-	uc_close(m_uc);
+    if (m_uc != nullptr)
+        uc_close(m_uc);
 
 	m_uc = nullptr;
 }

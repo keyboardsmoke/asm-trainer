@@ -1,6 +1,7 @@
 main:
 push HelloWorld
 call print
+add esp, 4
 call exit
 
 exit:

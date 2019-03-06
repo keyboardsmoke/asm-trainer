@@ -46,7 +46,7 @@ static void ARM64_InterruptHook(uc_engine* uc, uint32_t number, void* user_data)
 		return;
 	}
 
-	uint64_t syscallNumber = call_value.svcNumber;
+	const uint64_t syscallNumber = call_value.svcNumber;
 
 	// Just grab a bunch of registers here so we don't have to make a bunch of calls
 	// Being lazy =)
@@ -58,7 +58,7 @@ static void ARM64_InterruptHook(uc_engine* uc, uint32_t number, void* user_data)
 	uc_reg_read(uc, UC_ARM64_REG_X3, &x3);
 	uc_reg_read(uc, UC_ARM64_REG_X4, &x4);
 
-	SyscallHandler(uc, syscallNumber, x0, x1, x2, x3, x4);
+	SyscallHandler(uc, user_data, syscallNumber, x0, x1, x2, x3, x4);
 
 	uc_reg_write(uc, UC_ARM64_REG_X0, &x0);
 	uc_reg_write(uc, UC_ARM64_REG_X1, &x1);
@@ -107,7 +107,7 @@ bool ARM64Emulator::Initialize(void* buffer, size_t size)
     }
 
 	uc_hook trace;
-	err = uc_hook_add(m_uc, &trace, UC_HOOK_INTR, ARM64_InterruptHook, nullptr, 0, -1);
+	err = uc_hook_add(m_uc, &trace, UC_HOOK_INTR, ARM64_InterruptHook, this, 0, -1);
 
 	if (err)
 	{
@@ -199,7 +199,8 @@ void ARM64Emulator::PrintContext(std::ostream& os)
 
 void ARM64Emulator::Close()
 {
-	uc_close(m_uc);
+    if (m_uc != nullptr)
+        uc_close(m_uc);
 
 	m_uc = nullptr;
 }

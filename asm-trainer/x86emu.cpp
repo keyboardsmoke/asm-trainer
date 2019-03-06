@@ -5,25 +5,13 @@
 #include "x86emu.h"
 #include "syscall.h"
 
-static void X86_InterruptHook(uc_engine* uc, void* user_data)
+static void X86_SyscallHook(uc_engine* uc, void* user_data)
 {
     uc_err err = UC_ERR_OK;
 
     uint32_t syscallIndex = 0;
 
-    if (user_data == (void *)UC_X86_INS_SYSCALL)
-    {
-        err = uc_reg_read(uc, UC_X86_REG_EAX, &syscallIndex);
-    }
-    else if (user_data == (void *)UC_X86_INS_SYSENTER)
-    {
-        err = uc_reg_read(uc, UC_X86_REG_EAX, &syscallIndex);
-    }
-    else
-    {
-        // Unhandled, weird.
-        return;
-    }
+    err = uc_reg_read(uc, UC_X86_REG_EAX, &syscallIndex);
 
     uint32_t eax = 0, ebx = 0, ecx = 0, edx = 0, stub = 0;
 
@@ -32,7 +20,7 @@ static void X86_InterruptHook(uc_engine* uc, void* user_data)
     uc_reg_read(uc, UC_X86_REG_ECX, &ecx);
     uc_reg_read(uc, UC_X86_REG_EDX, &edx);
 
-    SyscallHandler(uc, syscallIndex, eax, ebx, ecx, edx, stub);
+    SyscallHandler(uc, user_data, syscallIndex, eax, ebx, ecx, edx, stub);
 
     uc_reg_write(uc, UC_X86_REG_EAX, &eax);
     uc_reg_write(uc, UC_X86_REG_EBX, &ebx);
@@ -79,17 +67,8 @@ bool X86Emulator::Initialize(void* buffer, size_t size)
         return false;
     }
 
-    uc_hook sysenter, syscall;
-    err = uc_hook_add(m_uc, &syscall, UC_HOOK_INSN, X86_InterruptHook, (void *)(int)UC_X86_INS_SYSCALL, 1, 0, UC_X86_INS_SYSCALL);
-
-    if (err)
-    {
-        std::cerr << "[ERROR] Emulator uc_hook_add failed with error [" << uc_strerror(err) << "]" << std::endl;
-
-        return false;
-    }
-
-    err = uc_hook_add(m_uc, &sysenter, UC_HOOK_INSN, X86_InterruptHook, (void *)(int)UC_X86_INS_SYSENTER, 1, 0, UC_X86_INS_SYSENTER);
+    uc_hook syscall;
+    err = uc_hook_add(m_uc, &syscall, UC_HOOK_INSN, X86_SyscallHook, (void *)(int)UC_X86_INS_SYSCALL, 1, 0, UC_X86_INS_SYSCALL);
 
     if (err)
     {
@@ -175,7 +154,8 @@ void X86Emulator::PrintContext(std::ostream& os)
 
 void X86Emulator::Close()
 {
-    uc_close(m_uc);
+    if (m_uc != nullptr)
+        uc_close(m_uc);
 
     m_uc = nullptr;
 }

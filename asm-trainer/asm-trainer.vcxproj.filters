@@ -21,6 +21,12 @@
     <Filter Include="Source Files\assembler">
       <UniqueIdentifier>{6ac6ccaf-935a-4da3-a3f8-a443dd89f703}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\exercises">
+      <UniqueIdentifier>{f4da41d0-3f2e-422b-96b0-15bb9139724e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\exercises">
+      <UniqueIdentifier>{f14485b5-2f9a-4170-bb6c-57c97c85f02a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -56,14 +62,20 @@
     <ClInclude Include="x64emu.h">
       <Filter>Header Files\emu</Filter>
     </ClInclude>
+    <ClInclude Include="allocator.h">
+      <Filter>Header Files\emu</Filter>
+    </ClInclude>
     <ClInclude Include="syscall.h">
       <Filter>Header Files\emu</Filter>
     </ClInclude>
     <ClInclude Include="util.h">
       <Filter>Header Files\emu</Filter>
     </ClInclude>
-    <ClInclude Include="allocator.h">
-      <Filter>Header Files\emu</Filter>
+    <ClInclude Include="math_exercises.h">
+      <Filter>Header Files\exercises</Filter>
+    </ClInclude>
+    <ClInclude Include="exercise.h">
+      <Filter>Header Files\exercises</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -97,11 +109,14 @@
     <ClCompile Include="x64emu.cpp">
       <Filter>Source Files\emu</Filter>
     </ClCompile>
+    <ClCompile Include="allocator.cpp">
+      <Filter>Source Files\emu</Filter>
+    </ClCompile>
     <ClCompile Include="syscall.cpp">
       <Filter>Source Files\emu</Filter>
     </ClCompile>
-    <ClCompile Include="allocator.cpp">
-      <Filter>Source Files\emu</Filter>
+    <ClCompile Include="math_exercises.cpp">
+      <Filter>Source Files\exercises</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
