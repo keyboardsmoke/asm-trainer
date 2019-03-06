@@ -138,9 +138,9 @@ bool ARM32Emulator::Initialize(void* buffer, size_t size)
 	}
 
 	// Initialize the mapping
-	size_t map_size = Emulator::PageAlignUp(size);
+    const uint64_t codeMapSize = Emulator::PageAlignUp(size);
 
-	err = uc_mem_map(m_uc, Emulator::StartAddress, map_size, UC_PROT_ALL);
+	err = uc_mem_map(m_uc, Emulator::StartAddress, codeMapSize, UC_PROT_ALL);
 
 	if (err)
 	{
@@ -157,6 +157,31 @@ bool ARM32Emulator::Initialize(void* buffer, size_t size)
 
 		return false;
 	}
+
+    // Setup fixed length stack
+    const uint64_t stackAddress = Emulator::StartAddress + codeMapSize;
+    const uint64_t stackSize = Emulator::PageAlignUp(m_stackSize);
+
+    err = uc_mem_map(m_uc, stackAddress, stackSize, UC_PROT_ALL);
+
+    if (err)
+    {
+        std::cerr << "[ERROR] Emulator uc_mem_map failed with error [" << uc_strerror(err) << "]" << std::endl;
+
+        return false;
+    }
+
+    std::cout << ">>> Reserved " << std::hex << stackSize << std::dec << " bytes of stack space at address " << std::hex << stackAddress << std::dec << std::endl;
+
+    err = uc_reg_write(m_uc, UC_ARM_REG_SP, &stackAddress);
+
+    if (err)
+    {
+        std::cerr << "[ERROR] Emulator uc_reg_write failed with error [" << uc_strerror(err) << "]" << std::endl;
+
+        return false;
+    }
+
 
 	uc_hook trace;
 	err = uc_hook_add(m_uc, &trace, UC_HOOK_INTR, ARM32_InterruptHook, nullptr, 0, -1);
@@ -203,7 +228,7 @@ uc_err ReadRegisterBatch(uc_engine* uc, const int(&registerIds)[N], uint32_t(&va
 
 void ARM32Emulator::PrintContext(std::ostream& os)
 {
-	const int regIds[9] =
+	const int regIds[] =
 	{
 		UC_ARM_REG_R0,
 		UC_ARM_REG_R1,
@@ -216,7 +241,7 @@ void ARM32Emulator::PrintContext(std::ostream& os)
 		UC_ARM_REG_LR
 	};
 
-	const char* regNames[9] =
+	const char* regNames[] =
 	{
 		"R0",
 		"R1",

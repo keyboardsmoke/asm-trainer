@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="fpu">
+      <UniqueIdentifier>{df87866c-9f1a-48b6-99ef-8c98447f64ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hw">
+      <UniqueIdentifier>{388b4375-16d3-48e1-9e0f-538ff8d0d107}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hw\i386">
+      <UniqueIdentifier>{faa69310-1c51-4a38-8014-e99df9dcf5ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hw\intc">
+      <UniqueIdentifier>{b29fe974-14fe-4d95-8d9e-7d32f081674f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="target-i386">
+      <UniqueIdentifier>{b98c98f2-946a-4f28-8e5d-f41d3135cd7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tcg">
+      <UniqueIdentifier>{ec600655-416d-40a3-9fed-8f4b1fb88ffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tcg\i386">
+      <UniqueIdentifier>{89271c9c-521d-428b-bb5f-903a8b53a543}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ext\unicorn\qemu\fpu\softfloat.c">
+      <Filter>fpu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\hw\i386\pc.c">
+      <Filter>hw\i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\hw\i386\pc_piix.c">
+      <Filter>hw\i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\hw\intc\apic.c">
+      <Filter>hw\intc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\hw\intc\apic_common.c">
+      <Filter>hw\intc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\arch_memory_mapping.c">
+      <Filter>target-i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\cc_helper.c">
+      <Filter>target-i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\cpu.c">
+      <Filter>target-i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\excp_helper.c">
+      <Filter>target-i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\fpu_helper.c">
+      <Filter>target-i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\helper.c">
+      <Filter>target-i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\int_helper.c">
+      <Filter>target-i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\mem_helper.c">
+      <Filter>target-i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\misc_helper.c">
+      <Filter>target-i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\seg_helper.c">
+      <Filter>target-i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\smm_helper.c">
+      <Filter>target-i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\svm_helper.c">
+      <Filter>target-i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\translate.c">
+      <Filter>target-i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\unicorn.c">
+      <Filter>target-i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\tcg\i386\tcg-target.c">
+      <Filter>tcg\i386</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\tcg\tcg.c">
+      <Filter>tcg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\cpu-exec.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\cpus.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\cputlb.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\exec.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\ioport.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\memory.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\memory_mapping.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\translate-all.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\tcg\optimize.c">
+      <Filter>tcg</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ext\unicorn\qemu\fpu\softfloat-macros.h">
+      <Filter>fpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\fpu\softfloat-specialize.h">
+      <Filter>fpu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\cc_helper_template.h">
+      <Filter>target-i386</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\cpu.h">
+      <Filter>target-i386</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\cpu-qom.h">
+      <Filter>target-i386</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\helper.h">
+      <Filter>target-i386</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\ops_sse.h">
+      <Filter>target-i386</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\ops_sse_header.h">
+      <Filter>target-i386</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\shift_helper_template.h">
+      <Filter>target-i386</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\svm.h">
+      <Filter>target-i386</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\topology.h">
+      <Filter>target-i386</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\unicorn.h">
+      <Filter>target-i386</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\tcg\i386\tcg-target.h">
+      <Filter>tcg\i386</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\tcg\tcg.h">
+      <Filter>tcg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\tcg\tcg-be-ldst.h">
+      <Filter>tcg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\tcg\tcg-be-null.h">
+      <Filter>tcg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\tcg\tcg-op.h">
+      <Filter>tcg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\tcg\tcg-opc.h">
+      <Filter>tcg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\qemu\tcg\tcg-runtime.h">
+      <Filter>tcg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ext\unicorn\msvc\unicorn\config-host.h" />
+    <ClInclude Include="..\ext\unicorn\msvc\unicorn\x86_64-softmmu\config-target.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\x86_64.h" />
+  </ItemGroup>
+</Project>

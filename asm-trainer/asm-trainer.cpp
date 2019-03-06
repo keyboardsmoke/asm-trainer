@@ -7,10 +7,14 @@
 #include "emu.h"
 #include "aarch64emu.h"
 #include "aarch32emu.h"
+#include "x64emu.h"
+#include "x86emu.h"
 
 #include "assembler.h"
 #include "aarch64asm.h"
 #include "aarch32asm.h"
+#include "x64asm.h"
+#include "x86asm.h"
 
 cxxopts::Options options("asm-trainer", "Assembly Trainer");
 
@@ -119,6 +123,16 @@ int main(int argc, char** argv, char** envp)
 
 		std::cout << ">>> Using aarch32 emulator and assembler engines." << std::endl;
 	}
+    else if (engine == "x64") 
+    {
+        emu = new X64Emulator;
+        assembler = new X64Assembler;
+    }
+    else if (engine == "x86")
+    {
+        emu = new X86Emulator;
+        assembler = new X86Assembler;
+    }
 	else
 	{
 		std::cerr << ">>> Engine \"" << engine << "\" is not supported." << std::endl;
@@ -174,11 +188,8 @@ int main(int argc, char** argv, char** envp)
 	status = 0;
 
 end:
-	if (emu != nullptr)
-		delete emu;
-
-	if (assembler != nullptr)
-		delete assembler;
+	delete emu;
+	delete assembler;
 
 	return status;
 }

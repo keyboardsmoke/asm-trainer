@@ -153,7 +153,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>aarch64-softmmu.lib;aarch64eb-softmmu.lib;arm-softmmu.lib;armeb-softmmu.lib;unicorn_lib.lib;$(SolutionDir)ext/keystone/vs/llvm/lib/keystone.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>aarch64-softmmu.lib;aarch64eb-softmmu.lib;arm-softmmu.lib;armeb-softmmu.lib;x86_64-softmmu.lib;unicorn_lib.lib;$(SolutionDir)ext/keystone/build/llvm/lib/keystone.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -165,6 +165,10 @@
     <ClInclude Include="assembler.h" />
     <ClInclude Include="emu.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="x64asm.h" />
+    <ClInclude Include="x64emu.h" />
+    <ClInclude Include="x86asm.h" />
+    <ClInclude Include="x86emu.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aarch32asm.cpp" />
@@ -178,6 +182,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="x64asm.cpp" />
+    <ClCompile Include="x64emu.cpp" />
+    <ClCompile Include="x86asm.cpp" />
+    <ClCompile Include="x86emu.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ext\unicorn\qemu\cpu-exec.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\cpus.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\cputlb.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\exec.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\fpu\softfloat.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\hw\i386\pc.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\hw\i386\pc_piix.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\hw\intc\apic.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\hw\intc\apic_common.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\ioport.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\memory.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\memory_mapping.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\arch_memory_mapping.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\cc_helper.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\cpu.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\excp_helper.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\fpu_helper.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\helper.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\int_helper.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\mem_helper.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\misc_helper.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\seg_helper.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\smm_helper.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\svm_helper.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\translate.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\target-i386\unicorn.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\tcg\i386\tcg-target.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\ext\unicorn\qemu\tcg\optimize.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\tcg\tcg.c" />
+    <ClCompile Include="..\ext\unicorn\qemu\translate-all.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ext\unicorn\msvc\unicorn\config-host.h" />
+    <ClInclude Include="..\ext\unicorn\msvc\unicorn\x86_64-softmmu\config-target.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\fpu\softfloat-macros.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\fpu\softfloat-specialize.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\cc_helper_template.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\cpu-qom.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\cpu.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\helper.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\ops_sse.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\ops_sse_header.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\shift_helper_template.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\svm.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\topology.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\target-i386\unicorn.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\tcg\i386\tcg-target.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\tcg\tcg-be-ldst.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\tcg\tcg-be-null.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\tcg\tcg-op.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\tcg\tcg-opc.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\tcg\tcg-runtime.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\tcg\tcg.h" />
+    <ClInclude Include="..\ext\unicorn\qemu\x86_64.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{8C3AD934-3C92-4CEC-B06C-68697E9FD558}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>x8664softmmu</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;__x86_64__;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;inline=__inline;__func__=__FUNCTION__;NEED_CPU_H;WIN32_LEAN_AND_MEAN</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)ext/unicorn/include;$(SolutionDir)ext/unicorn/qemu;$(SolutionDir)ext/unicorn/qemu/include;$(SolutionDir)ext/unicorn/qemu/tcg;$(SolutionDir)ext/unicorn/qemu/tcg/i386;$(SolutionDir)ext/unicorn/qemu/target-i386;$(SolutionDir)ext/unicorn/msvc/unicorn;$(SolutionDir)ext/unicorn/msvc/unicorn/x86_64-softmmu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ExceptionHandling>false</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ForcedIncludeFiles>x86_64.h</ForcedIncludeFiles>
+      <OmitFramePointers>false</OmitFramePointers>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <LinkTimeCodeGeneration />
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

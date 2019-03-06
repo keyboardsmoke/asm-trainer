@@ -3,7 +3,7 @@
 class ARM32Emulator : public Emulator
 {
 public:
-	ARM32Emulator() : Emulator(), m_bufferSize(0) {}
+    ARM32Emulator(uint64_t stackSize = Emulator::PageSize) : Emulator(), m_bufferSize(0), m_stackSize(stackSize) {}
 
 	virtual bool Initialize(void* buffer, size_t size) override;
 	virtual bool Emulate() override;
@@ -12,4 +12,5 @@ public:
 
 private:
 	uint64_t m_bufferSize;
+    uint64_t m_stackSize;
 };

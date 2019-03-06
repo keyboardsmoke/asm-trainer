@@ -44,6 +44,18 @@
     <ClInclude Include="aarch32asm.h">
       <Filter>Header Files\assembler</Filter>
     </ClInclude>
+    <ClInclude Include="x86asm.h">
+      <Filter>Header Files\assembler</Filter>
+    </ClInclude>
+    <ClInclude Include="x64asm.h">
+      <Filter>Header Files\assembler</Filter>
+    </ClInclude>
+    <ClInclude Include="x86emu.h">
+      <Filter>Header Files\emu</Filter>
+    </ClInclude>
+    <ClInclude Include="x64emu.h">
+      <Filter>Header Files\emu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -63,6 +75,18 @@
     </ClCompile>
     <ClCompile Include="aarch32asm.cpp">
       <Filter>Source Files\assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="x86asm.cpp">
+      <Filter>Source Files\assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="x64asm.cpp">
+      <Filter>Source Files\assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="x86emu.cpp">
+      <Filter>Source Files\emu</Filter>
+    </ClCompile>
+    <ClCompile Include="x64emu.cpp">
+      <Filter>Source Files\emu</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
