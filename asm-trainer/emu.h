@@ -17,6 +17,12 @@ public:
 
     uc_engine* GetEngine() { return m_uc; }
 
+    template<typename T>
+    bool is() 
+    {
+        return (dynamic_cast<T *>(this) != nullptr);
+    }
+
 protected:
 	Allocator* m_alloc;
 	uc_engine* m_uc;

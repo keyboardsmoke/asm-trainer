@@ -10,8 +10,7 @@ syscall
 
 print:
 mov eax, 1
-mov ebx, [esp+4]
-syscall
+syscall /* syscall takes esp+4 as the first argument, but the push already shifted the stack before this call, so we don't have to access it */
 ret
 
 HelloWorld:

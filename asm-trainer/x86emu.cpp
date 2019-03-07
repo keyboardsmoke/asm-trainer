@@ -9,23 +9,32 @@ static void X86_SyscallHook(uc_engine* uc, void* user_data)
 {
     uc_err err = UC_ERR_OK;
 
-    uint32_t syscallIndex = 0;
+    uint32_t syscallIndex = 0, stackPointer = 0;
 
     err = uc_reg_read(uc, UC_X86_REG_EAX, &syscallIndex);
+    err = uc_reg_read(uc, UC_X86_REG_ESP, &stackPointer);
 
-    uint32_t eax = 0, ebx = 0, ecx = 0, edx = 0, stub = 0;
+    // In x86 we have to read stack variables instead of registers.
+    // I'd really _like_ to use registers because it's easier, but we're trying to teach people stuff here =)
+
+    uint32_t eax = 0;
+    uint32_t arg1 = 0, arg2 = 0, arg3 = 0, arg4 = 0;
 
     uc_reg_read(uc, UC_X86_REG_EAX, &eax);
-    uc_reg_read(uc, UC_X86_REG_EBX, &ebx);
-    uc_reg_read(uc, UC_X86_REG_ECX, &ecx);
-    uc_reg_read(uc, UC_X86_REG_EDX, &edx);
+    
+    uc_mem_read(uc, stackPointer + 0x04, &arg1, sizeof(uint32_t));
+    uc_mem_read(uc, stackPointer + 0x08, &arg2, sizeof(uint32_t));
+    uc_mem_read(uc, stackPointer + 0x0C, &arg3, sizeof(uint32_t));
+    uc_mem_read(uc, stackPointer + 0x10, &arg4, sizeof(uint32_t));
 
-    SyscallHandler(uc, user_data, syscallIndex, eax, ebx, ecx, edx, stub);
+    SyscallHandler(uc, user_data, syscallIndex, eax, arg1, arg2, arg3, arg4);
 
     uc_reg_write(uc, UC_X86_REG_EAX, &eax);
-    uc_reg_write(uc, UC_X86_REG_EBX, &ebx);
-    uc_reg_write(uc, UC_X86_REG_ECX, &ecx);
-    uc_reg_write(uc, UC_X86_REG_EDX, &edx);
+
+    uc_mem_write(uc, stackPointer + 0x04, &arg1, sizeof(uint32_t));
+    uc_mem_write(uc, stackPointer + 0x08, &arg2, sizeof(uint32_t));
+    uc_mem_write(uc, stackPointer + 0x0C, &arg3, sizeof(uint32_t));
+    uc_mem_write(uc, stackPointer + 0x10, &arg4, sizeof(uint32_t));
 }
 
 bool X86Emulator::Initialize(void* buffer, size_t size)
