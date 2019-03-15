@@ -26,10 +26,10 @@ void print(uc_engine* uc, void* userdata, uint64_t& ret, uint64_t& arg1, uint64_
 {
 	ret = 0;
 
-	std::string str;
+    std::string str;
 	if (emuutil::ReadStringFromMemory(uc, arg1, str))
 	{
-		std::cout << str << std::endl;
+        puts(str.c_str());
 
 		ret = 1;
 	}
@@ -37,8 +37,6 @@ void print(uc_engine* uc, void* userdata, uint64_t& ret, uint64_t& arg1, uint64_
 
 void map_memory(uc_engine* uc, void* userdata, uint64_t& ret, uint64_t& arg1, uint64_t& arg2, uint64_t& arg3, uint64_t& arg4)
 {
-    // 
-
 	const uc_err err = uc_mem_map(uc, arg1, arg2, UC_PROT_ALL);
 
 	ret = (err == UC_ERR_OK) ? 1 : 0;
@@ -58,31 +56,11 @@ void is_mem_mapped(uc_engine* uc, void* userdata, uint64_t& ret, uint64_t& arg1,
 	ret = (err == UC_ERR_READ_UNMAPPED) ? 0 : 1;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Reserved syscalls for learning purposes
-//////////////////////////////////////////////////////////////////////////
-
-void ex_add_4(uc_engine* uc, void* userdata, uint64_t& ret, uint64_t& arg1, uint64_t& arg2, uint64_t& arg3, uint64_t& arg4)
+void print_char(uc_engine* uc, void* userdata, uint64_t& ret, uint64_t& arg1, uint64_t& arg2, uint64_t& arg3, uint64_t& arg4)
 {
-    Emulator* emu = reinterpret_cast<Emulator *>(userdata);
+    putc(static_cast<char>(arg1), stdout);
 
-    if (emu->is<ARM32Emulator>())
-    {
-        // r0, r1, r2, r3
-        
-    }
-    else if (emu->is<ARM64Emulator>()) 
-    {
-        // x0, x1, x2, x3
-    }
-    else if (emu->is<X86Emulator>()) 
-    {
-        // esp + 4, esp + 8, esp + 0xc, esp + 0x10
-    }
-    else if (emu->is<X64Emulator>()) 
-    {
-        // rcx, rdx, r8, r9
-    }
+    ret = 1;
 }
 
 RegisteredSyscall registered_handlers[] =
@@ -92,8 +70,7 @@ RegisteredSyscall registered_handlers[] =
 { SYSCALL_MAP, map_memory },
 { SYSCALL_UNMAP, unmap_memory },
 { SYSCALL_MEM_MAPPED, is_mem_mapped },
-
-{ SYSCALL_EX_ADD_4, ex_add_4 },
+{ SYSCALL_PRINT_CHAR, print_char },
 };
 
 void SyscallHandler(uc_engine* uc, void* userdata, uint32_t syscall, uint32_t& ret, uint32_t& arg1, uint32_t& arg2, uint32_t& arg3, uint32_t& arg4)

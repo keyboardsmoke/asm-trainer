@@ -89,7 +89,10 @@ bool ARM32Emulator::Initialize(void* buffer, size_t size)
 
     std::cout << ">>> Reserved " << std::hex << m_stackSize << std::dec << " bytes of stack space at address " << std::hex << stackAddress << std::dec << std::endl;
 
-    err = uc_reg_write(m_uc, UC_ARM_REG_SP, &stackAddress);
+    // See: ARM64, i don't think ARM is responsible for similar behavior, but no need to risk it
+    uint64_t stackSlackSpaceAddress = stackAddress + 32;
+
+    err = uc_reg_write(m_uc, UC_ARM_REG_SP, &stackSlackSpaceAddress);
 
     if (err)
     {

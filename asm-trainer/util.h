@@ -4,19 +4,25 @@ namespace emuutil
 {
 	static bool ReadStringFromMemory(uc_engine* uc, uint64_t addr, std::string& output)
 	{
-		for (char c = -1; c != 0; ++addr)
-		{
-			uc_err err = uc_mem_read(uc, addr, &c, sizeof(char));
+        while (true)
+        {
+            char c = 0;
+            const uc_err err = uc_mem_read(uc, addr, &c, sizeof(char));
 
-			if (err != UC_ERR_OK)
-			{
-				return false;
-			}
+            if (err != UC_ERR_OK)
+            {
+                return false;
+            }
 
-			output.push_back(c);
-		}
+            output.push_back(c);
 
-		output.push_back(0);
+            if (c == 0)
+            {
+                break;
+            }
+
+            ++addr;
+        }
 
 		return true;
 	}

@@ -27,7 +27,9 @@ static void ARM64_InterruptHook(uc_engine* uc, uint32_t number, void* user_data)
 		return;
 	}
 
-	SvcCall call_value = { 0 };
+    SvcCall call_value;
+    memset(&call_value, 0, sizeof(call_value));
+
 	err = uc_mem_read(uc, pc - sizeof(SvcCall), &call_value, sizeof(call_value));
 
 	if (err != UC_ERR_OK)
@@ -52,19 +54,19 @@ static void ARM64_InterruptHook(uc_engine* uc, uint32_t number, void* user_data)
 	// Being lazy =)
 	uint64_t x0 = 0, x1 = 0, x2 = 0, x3 = 0, x4 = 0;
 
-	uc_reg_read(uc, UC_ARM64_REG_X0, &x0);
-	uc_reg_read(uc, UC_ARM64_REG_X1, &x1);
-	uc_reg_read(uc, UC_ARM64_REG_X2, &x2);
-	uc_reg_read(uc, UC_ARM64_REG_X3, &x3);
-	uc_reg_read(uc, UC_ARM64_REG_X4, &x4);
+    err = uc_reg_read(uc, UC_ARM64_REG_X0, &x0); if (err != UC_ERR_OK) { return; }
+	err = uc_reg_read(uc, UC_ARM64_REG_X1, &x1); if (err != UC_ERR_OK) { return; }
+	err = uc_reg_read(uc, UC_ARM64_REG_X2, &x2); if (err != UC_ERR_OK) { return; }
+	err = uc_reg_read(uc, UC_ARM64_REG_X3, &x3); if (err != UC_ERR_OK) { return; }
+	err = uc_reg_read(uc, UC_ARM64_REG_X4, &x4); if (err != UC_ERR_OK) { return; }
 
 	SyscallHandler(uc, user_data, syscallNumber, x0, x1, x2, x3, x4);
 
-	uc_reg_write(uc, UC_ARM64_REG_X0, &x0);
-	uc_reg_write(uc, UC_ARM64_REG_X1, &x1);
-	uc_reg_write(uc, UC_ARM64_REG_X2, &x2);
-	uc_reg_write(uc, UC_ARM64_REG_X3, &x3);
-	uc_reg_write(uc, UC_ARM64_REG_X4, &x4);
+	err = uc_reg_write(uc, UC_ARM64_REG_X0, &x0); if (err != UC_ERR_OK) { return; }
+	err = uc_reg_write(uc, UC_ARM64_REG_X1, &x1); if (err != UC_ERR_OK) { return; }
+	err = uc_reg_write(uc, UC_ARM64_REG_X2, &x2); if (err != UC_ERR_OK) { return; }
+	err = uc_reg_write(uc, UC_ARM64_REG_X3, &x3); if (err != UC_ERR_OK) { return; }
+	err = uc_reg_write(uc, UC_ARM64_REG_X4, &x4); if (err != UC_ERR_OK) { return; }
 }
 
 bool ARM64Emulator::Initialize(void* buffer, size_t size)
@@ -97,7 +99,11 @@ bool ARM64Emulator::Initialize(void* buffer, size_t size)
 
     std::cout << ">>> Reserved " << std::hex << m_stackSize << std::dec << " bytes of stack space at address " << std::hex << stackAddress << std::dec << std::endl;
 
-    err = uc_reg_write(m_uc, UC_ARM64_REG_SP, &stackAddress);
+    // Often when functions are compiled with gcc, a real "function" will store x29 and x30 at sp-32
+    // This will cause some serious issues if we don't give up some slack space
+    uint64_t stackSlackSpaceAddress = stackAddress + 32;
+
+    err = uc_reg_write(m_uc, UC_ARM64_REG_SP, &stackSlackSpaceAddress);
 
     if (err)
     {
@@ -200,7 +206,9 @@ void ARM64Emulator::PrintContext(std::ostream& os)
 void ARM64Emulator::Close()
 {
     if (m_uc != nullptr)
+    {
         uc_close(m_uc);
+    }
 
 	m_uc = nullptr;
 }

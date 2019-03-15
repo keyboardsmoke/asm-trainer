@@ -29,6 +29,8 @@ public:
 	bool IsMemoryUnmapped(uint64_t address);
 	bool IsMemoryRegionFree(uint64_t address, uint64_t size);
 
+    std::map<uint64_t, Mapping>& GetMappings() { return m_mappings; }
+
 private:
 	uint64_t FindNearestAvailableMemory(uint64_t size);
 

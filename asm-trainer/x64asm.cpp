@@ -30,11 +30,13 @@ bool X64Assembler::Assemble(std::string& assembly, std::vector<uint8_t>& encoded
 
     unsigned char* enc = nullptr;
 
-    int result = ks_asm(m_ks, assembly.c_str(), 0, &enc, &size, &count);
+    const int result = ks_asm(m_ks, assembly.c_str(), 0, &enc, &size, &count);
 
     if (result != 0)
     {
-        std::cerr << "[ERROR] Assembly engine ks_asm returned error." << std::endl;
+        const char* errorDescription = ks_strerror(ks_errno(m_ks));
+
+        std::cerr << "[ERROR] Assembly engine ks_asm returned error after executing " << count << " statements (" << errorDescription << ")" << std::endl;
         return false;
     }
 

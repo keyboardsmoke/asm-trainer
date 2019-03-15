@@ -15,7 +15,8 @@ public:
 	virtual void PrintContext(std::ostream& os) = 0;
 	virtual void Close() = 0;
 
-    uc_engine* GetEngine() { return m_uc; }
+    uc_engine* GetEngine() const { return m_uc; }
+    Allocator* GetAllocator() const { return m_alloc; }
 
     template<typename T>
     bool is() 

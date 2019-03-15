@@ -246,7 +246,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;inline=__inline;__func__=__FUNCTION__;__x86_64__;UNICORN_HAS_ARM64;UNICORN_HAS_ARM;UNICORN_HAS_X86;WIN32_LEAN_AND_MEAN</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)ext/unicorn/include;$(SolutionDir)ext/unicorn/qemu;$(SolutionDir)ext/unicorn/qemu/include;$(SolutionDir)ext/unicorn/qemu/tcg;$(SolutionDir)ext/unicorn/msvc/unicorn;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>None</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>

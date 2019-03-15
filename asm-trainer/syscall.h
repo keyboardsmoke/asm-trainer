@@ -7,6 +7,7 @@ enum SyscallIndices
 	SYSCALL_MAP,                        // Map memory to address
 	SYSCALL_UNMAP,                      // Unmap memory
 	SYSCALL_MEM_MAPPED,                 // Check if memory is mapped in      
+    SYSCALL_PRINT_CHAR,                 // This makes things a little easier by printing a single char
 
     //////////////////////////////////////////////////////////////////////////
     
